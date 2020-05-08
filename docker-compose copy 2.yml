@@ -39,7 +39,7 @@ services:
             - JIBRI_RECORDER_PASSWORD
             - ENABLE_RECORDING
         networks:
-            #proxy:
+            proxy:
             meet.jitsi:
                 aliases:
                     - ${XMPP_DOMAIN}
@@ -120,7 +120,7 @@ services:
             - LOG_LEVEL
             - TZ
         networks:
-            #proxy:
+            proxy:
             meet.jitsi:
                 aliases:
                     - ${XMPP_SERVER}
@@ -151,7 +151,7 @@ services:
         depends_on:
             - prosody
         networks:
-            #proxy:
+            proxy:
             meet.jitsi:
 
     # Video bridge
@@ -185,11 +185,11 @@ services:
         depends_on:
             - prosody
         networks:
-            #proxy:
+            proxy:
             meet.jitsi:
         labels:
             traefik.enable: 'true'
-            traefik.docker.network: meet.jitsi
+            traefik.docker.network: proxy
             traefik.udp.routers.jitsi-vb.service: jitsi-vb
             traefik.udp.routers.jitsi-vb.entrypoints: jitsi-video-bridge
             traefik.udp.services.jitsi-vb.loadbalancer.server.port: 10000
@@ -199,6 +199,6 @@ services:
 
 # Custom network so all services can communicate using a FQDN
 networks:
+    proxy:
+        external: true
     meet.jitsi:
-        external:
-            true
